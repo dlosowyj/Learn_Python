@@ -3,8 +3,8 @@ from sys import exit
 def gold_room():
     print("This room is full of gold. How much do you take?")
 
-    choise = input("> ")
-    if "0" in choice or "1" in choice:
+    choice = input("> ")
+    if is_number(choice):
         how_much = int(choice)
     else:
         dead("Man, learn to type a number.")
@@ -28,6 +28,9 @@ def bear_room():
         if choice == "take honey":
             dead("The bear looks at you then slaps your face off.")
         elif choice == "taunt bear" and not bear_moved:
+            print("The bear has moved from the door. You can go through it now.")
+            bear_moved = True
+        elif choice == "taunt bear" and bear_moved:
             dead("The bear gets pissed off and chews your leg off.")
         elif choice == "open door" and bear_moved:
             gold_room()
@@ -65,5 +68,12 @@ def start():
         cthulhu_room()
     else:
         dead("You stumble around the room until you starve.")
+
+def is_number(i):
+    try:
+        int(i)
+        return True
+    except ValueError:
+        return False
 
 start()

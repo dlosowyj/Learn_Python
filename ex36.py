@@ -1,13 +1,17 @@
 from sys import exit
 
+# Gloabl variable to keep track of the choice of room
 climber = False
 
+# Handle the problems of the climbing room
 def climbing_room():
+    # The global identifier is necessary to adust the global variable's value
     global climber 
     climber = True
 
     print("Welcome to the climbing room!")
     
+    # Keep looping until a suitable option is chosen
     while True:
         print("Do you prefer climbing or top roping?")
         choice = input("> ")
@@ -21,9 +25,11 @@ def climbing_room():
         else:
             print("That's not climbing. Try again, you dumb kayaker.")
 
+# Handle the problems of the running room
 def running_room():
     print("Welcome to the running room!")
 
+    # Keep looping until a suitable option is chosen
     while True:
         print("Do you want to do a long, slow run or do some HIIT?")
         choice = input("> ")
@@ -37,10 +43,12 @@ def running_room():
         else:
             print("What the hell are you, a kayaker?")
 
+# Handle problems on the mountain, if this was reached
 def mountain_view():
     print("At the top of the mountain you find a dragon.")
     print("What do you do?")
 
+    # Keep looping until a suitable option is chosen
     while True:
         choice = input("> ")
         
@@ -59,6 +67,7 @@ def mountain_view():
         else:
             print("Why are you so uninteligible?")
 
+# Start the program by asking for a choice of room
 def start():
     print("Hey! There are two rooms in front of you.")
     print("Do you want to go to the climbing or running room?")
@@ -73,6 +82,7 @@ def start():
         print("Well now you get nothing.")
         take_break("Walk home in shame.")
 
+# Exit the program nicely
 def take_break(reason):
     print(reason, "good job!")
     exit(0)

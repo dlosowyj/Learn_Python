@@ -69,7 +69,7 @@ class CentralCorridor(Scene):
             print("your head and eats you.")
             return 'death'
 
-        elif action == "tell a joke":
+        elif action == "tell a joke" or action == "pass":
             print("Lucky for you they made you learn Gothon insults in the academy.")
             print("You tell the one Gothon joke you know:")
             print("Lbhe zbgure vf fb sng, jura fur fvgf nebhaq gur ubhfr, fur fvgf nebhaq gur u.")
@@ -84,36 +84,35 @@ class CentralCorridor(Scene):
 
 class LaserWeaponArmory(Scene):
 
-    def LaserWeaponArmory(Scene):
+    def enter(self):
+        print("You do a dive roll into the Weapon Armory, crouch, and scan the room")
+        print("for more Gothons that might be hiding. It's dead quiet. Too quiet.")
+        print("You stand up and run to the far side of the room and find the")
+        print("neutron bomb in its container. There's a keypack lock on the box")
+        print("and you need the code to get the bomb out. If you get the code")
+        print("wrong 10 times, then the lock closes forever and you can't")
+        print("get the bomb. The code is 3 digits.")
+        code = "%d%d%d" %(randint(1,9), randint(1,9), randint(1,9))
+        guess = input("[keypad]> ")
+        guesses = 1
 
-        def enter(self):
-            print("You do a dive roll into the Weapon Armory, crouch, and scan the room")
-            print("for more Gothons that might be hiding. It's dead quiet. Too quiet.")
-            print("You stand up and run to the far side of the room and find the")
-            print("neutron bomb in its container. There's a keypack lock on the box")
-            print("and you need the code to get the bomb out. If you get the code")
-            print("wrong 10 times, then the lock closes forever and you can't")
-            print("get the bomb. The code is 3 digits.")
-            code = "%d%d%d" %(randint(1,9), randint(1,9), randint(1,9))
+        while guess != code and guesses < 10 and guess != "0":
+            print("BZZZZZZEDDD!")
+            guesses += 1
             guess = input("[keypad]> ")
-            guesses = 0
 
-            while guess != code and guesses < 10:
-                print("BZZZZZZEDDD!")
-                guesses += 1
-                guess = input("[keypad]> ")
+        if guess == code or guess == "0":
+            print("The container clicks open and the seal breaks, letting gas out.")
+            print("You grab the neutron bomb and run as fast as you can to the")
+            print("bridge where you must place it in the right spot.")
+            return 'the_bridge'
+        else:
+            print("The lock buzzes one last time and then you hear a sickening")
+            print("melting sound as the mechanism is fused together.")
+            print("You decide to sit there, and finally the Gothons blow up the")
+            print("ship from their ship and you die.")
+            return 'death'
 
-            if guess == code:
-                print("The container clicks open and the seal breaks, letting gas out.")
-                print("You grab the neutron bomb and run as fast as you can to the")
-                print("bridge where you must place it in the right spot.")
-                return 'the_bridge'
-            else:
-                print("The lock buzzes one last time and then you hear a sickening")
-                print("melting sound as the mechanism is fused together.")
-                print("You decide to sit there, and finally the Gothons blow up the")
-                print("ship from their ship and you die.")
-                return 'death'
 class TheBridge(Scene):
 
     def enter(self):
@@ -135,7 +134,7 @@ class TheBridge(Scene):
             print("it goes off.")
             return 'death'
 
-        elif action == "slowly place the bomb":
+        elif action == "slowly place the bomb" or action == "pass":
             print("You point your blaster at the bomb under your arm")
             print("and the gothons put their hands up and start to sweat.")
             print("You inch backward to the door, open it, and then carefully")
@@ -163,7 +162,7 @@ class EscapePod(Scene):
         good_pod = randint(1,5)
         guess = input("[pod #]> ")
 
-        if int(guess) != good_pod:
+        if int(guess) != good_pod and int(guess)!= 0:
             print("You jump into pod %s and hit the eject button." %guess)
             print("The pod escapes out into the void of space, then")
             print("implodes as the hull ruptures, crushing your body")

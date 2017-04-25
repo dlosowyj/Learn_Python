@@ -1,6 +1,8 @@
 ## Animal is-a object (yes, sort of confusing) look at the extra credit
 class Animal(object):
-    pass
+    
+    def make_noise(self):
+        pass
 
 # Dog is-a animal
 class Dog(Animal):
@@ -9,12 +11,18 @@ class Dog(Animal):
         # Set the object's name to the given name
         self.name = name
 
+    def make_noise(self):
+        print("Bark!")
+
 # Cat is-a animal
 class Cat(Animal):
 
     def __init__(self, name):
         # Set the object's name to the given name
         self.name = name
+
+    def make_noise(self):
+        print("I'm a destructive jerk.")
 
 # Person is-a object
 class Person(object):
@@ -37,16 +45,29 @@ class Employee(Person):
         self.salary = salary
 
 # Fish is-a object
-class Fish(object):
-    pass
+class Fish(Animal):
+    
+    def __init__(self, name):
+        self.name = name
+
+    def make_noise(self):
+        print("Blub!")
 
 # Salmon is-a fish
 class Salmon(Fish):
-    pass
+    
+    def __init__(self, name, size):
+        super(Salmon, self).__init__(name)
+
+        self.size = size
 
 # Halibut is-a fish
 class Halibut(Fish):
-    pass
+    
+    def __init__(self, name, weight):
+        super(Halibut, self).__init__(name)
+
+        self.weight = weight
 
 # rover is-a Dog
 rover = Dog("Rover")
@@ -67,10 +88,17 @@ frank = Employee("Frank", 120000)
 frank.pet = rover
 
 # flipper is-a Fish
-flipper = Fish()
+flipper = Fish("Flipper")
 
 # crouse is-a Salmon
-crouse = Salmon()
+crouse = Salmon("Crouse", 12)
 
 # harry is-a Halibut
-harry = Halibut()
+harry = Halibut("Harry", 0.5)
+
+rover.make_noise()
+satan.make_noise()
+mary.pet.make_noise()
+flipper.make_noise()
+print(crouse.size)
+print(harry.weight)

@@ -206,6 +206,92 @@ class Map(object):
     def opening_scene(self):
         return self.next_scene(self.start_scene)
 
+class Character(object):
+
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+        self.damage = None
+
+    def attack():
+        return self.damage
+
+    def run():
+        return self.speed
+
+    def take_damage(damage):
+        self.hp -= damage
+
+class Player(Character):
+
+    def __init__(self):
+        super().__init__("You", 100)
+        self.damage = 10
+        self.speed = 10
+
+class Gothon(Character):
+
+    gothon_names = [
+            "Gredla",
+            "Mr. Poopy Butthole",
+            "Lance",
+            "Regina",
+            "Herb"
+            ]
+
+    def __init__(self):
+        super().__init__(Gothon.gothon_names[randint(0, len(Gothon.gothon_names)-1)], 25)
+        self.damage = 5
+        self.speed = 10
+
+class Encounter():
+
+    def enter():
+        # Make Player and Gothon objects
+        player = Player()
+        gothon = Gothon()
+
+        print("You're engaged in battle with the Gothon %s! How do you proceed?" %gothon.name)
+        
+        while player.hp > 0 and gothon.hp > 0:
+            action = input("> ")
+
+            if action  == 'attack':
+                # Give a 1/10 chance of missing
+                if randint(1,10) != 10:
+                    gothon.take_damage(player.attack())
+                    print(player.attack_lines[randint(0,len(player.attack_lines)-1)])
+                else:
+                    print(player.miss_lines[randint(0, len(player.miss_lines)-1)])
+
+                # Give 2/10 chance of Gothon missing
+                gothon_miss = randint(1,10)
+                if gothon_miss != 10 and gothon_miss != 9:
+                    player.take_damage(gothon.attack())
+                    print(gothon.attack_lines[randint(0, len(gothon.attack_lines)-1)])
+                else:
+                    print(gothon.miss_lines[randint(0, len(gothon.miss_lines)-1)])
+
+            elif action == 'run':
+                # Player's chance of running depends on difference in speed between them
+                # and the Gothon
+                chance = player.run()-gothon.run()+1
+                if randint(1,10) <= chance:
+                    print("You succeed in heroically running away.")
+                    return
+                else:
+                    print(player.run_lines[randint(0, len(player.run_lines)-1)])
+                    player.take_damage(gothon.attack())
+                    print(gothon.attack_lines[randint(0, len(gothon.attack_lines)-1)])
+            else:
+                print("DOES NOT COMPUTE!")
+                print("You're engaged in a battle with the Gothon %s! How do you proceed?" %gothon.name)
+
+        if player.hp <= 0:
+            Death.enter()
+
+        return
+
 a_map = Map('central_corridor')
 a_game = Engine(a_map)
 a_game.play()

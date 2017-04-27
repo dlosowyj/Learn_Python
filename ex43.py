@@ -52,13 +52,15 @@ class CentralCorridor(Scene):
         action = input("> ")
 
         if action == "shoot!":
-            print("Quick on the draw you yank out your blaster and fire it at the Gothon.")
-            print("His clown costume is flowing and moving around his body, which throws")
-            print("off your aim. Your laser hits his costume but misses him entirely. This")
-            print("completely ruins his brand new costume his mother bought him, which")
-            print("makes him fly into an insane rage and blast you repeatedly in the face until")
-            print("you are dead. Then he eats you.")
-            return 'death'
+            # print("Quick on the draw you yank out your blaster and fire it at the Gothon.")
+            # print("His clown costume is flowing and moving around his body, which throws")
+            # print("off your aim. Your laser hits his costume but misses him entirely. This")
+            # print("completely ruins his brand new costume his mother bought him, which")
+            # print("makes him fly into an insane rage and blast you repeatedly in the face until")
+            # print("you are dead. Then he eats you.")
+            # return 'death'
+            Encounter.enter()
+            return 'laser_weapon_armory'
 
         elif action == "dodge!":
             print("Like a world class boxer you dodge, weave, slip, and slide right")
@@ -208,21 +210,48 @@ class Map(object):
 
 class Character(object):
 
+    # Initialize a name, hp (mutable), max hp (immutable), and damage
     def __init__(self, name, hp):
         self.name = name
         self.hp = hp
+        self.max_hp = hp
         self.damage = None
 
-    def attack():
+    # Get the damage of the character
+    def attack(self):
         return self.damage
 
-    def run():
+    # Get the speed of the character
+    def run(self):
         return self.speed
 
-    def take_damage(damage):
+    # Reduce hp by damage dealt
+    def take_damage(self, damage):
         self.hp -= damage
 
+    # Return percent of hp remaining
+    def hp_check(self):
+        return (self.hp / self.max_hp * 100)
+
 class Player(Character):
+
+    attack_lines = [
+            "\"Avast, ye scalliwag!\" you shout, piercing the gothon with your anachronistic sword.",
+            "You shoot the Gothon while doing your best Terminator impression.",
+            "Your weak fist bounces off the Gothon, but somehow imparts some damage.",
+            "Using your best accent, you hurl a vicious insult at the alien wounding not only its feelings, but also its body."
+            ]
+
+    miss_lines = [
+            "Seriously? You somehow punch the wall, four feet from your enemy.",
+            "You make a heroic attempt, but the Gothon sidesteps your clearly telegraphed charge.",
+            "Disoriented by the situation, you can't get your body to move."
+            ]
+
+    run_lines = [
+            "Seeing a chance to escape, you try and dash around the creature only to run into it instead.",
+            "Hoping to catch it by surprise, you point one way and run the other. The Gothon isn't fooled."
+            ]
 
     def __init__(self):
         super().__init__("You", 100)
@@ -237,6 +266,16 @@ class Gothon(Character):
             "Lance",
             "Regina",
             "Herb"
+            ]
+
+    attack_lines = [
+            "The Gothon's supercharged X-ray magic gun hits you and makes a big owie.",
+            "In spite of your efforts to dodge, the alien catches you with a kick from its large feet."
+            ]
+
+    miss_lines = [
+            "Somehow the Gothon manages to whiff and hit absolutely nothing.",
+            "Pulling an anti-Kobe, the Gothon's blaster shot goes wide of its mark."
             ]
 
     def __init__(self):
@@ -260,32 +299,35 @@ class Encounter():
                 # Give a 1/10 chance of missing
                 if randint(1,10) != 10:
                     gothon.take_damage(player.attack())
-                    print(player.attack_lines[randint(0,len(player.attack_lines)-1)])
+                    print(player.attack_lines[randint(0,len(Player.attack_lines)-1)])
                 else:
-                    print(player.miss_lines[randint(0, len(player.miss_lines)-1)])
+                    print(player.miss_lines[randint(0, len(Player.miss_lines)-1)])
 
                 # Give 2/10 chance of Gothon missing
                 gothon_miss = randint(1,10)
                 if gothon_miss != 10 and gothon_miss != 9:
                     player.take_damage(gothon.attack())
-                    print(gothon.attack_lines[randint(0, len(gothon.attack_lines)-1)])
+                    print(gothon.attack_lines[randint(0, len(Gothon.attack_lines)-1)])
                 else:
-                    print(gothon.miss_lines[randint(0, len(gothon.miss_lines)-1)])
-
+                    print(gothon.miss_lines[randint(0, len(Gothon.miss_lines)-1)])
             elif action == 'run':
                 # Player's chance of running depends on difference in speed between them
                 # and the Gothon
                 chance = player.run()-gothon.run()+1
                 if randint(1,10) <= chance:
                     print("You succeed in heroically running away.")
-                    return
+                    break
                 else:
-                    print(player.run_lines[randint(0, len(player.run_lines)-1)])
+                    print(player.run_lines[randint(0, len(Player.run_lines)-1)])
                     player.take_damage(gothon.attack())
-                    print(gothon.attack_lines[randint(0, len(gothon.attack_lines)-1)])
+                    print(gothon.attack_lines[randint(0, len(Gothon.attack_lines)-1)])
             else:
                 print("DOES NOT COMPUTE!")
                 print("You're engaged in a battle with the Gothon %s! How do you proceed?" %gothon.name)
+
+            print("Player HP: %f%%\t%s HP: %f%%" %(player.hp_check(), gothon.name, gothon.hp_check()))
+
+
 
         if player.hp <= 0:
             Death.enter()
